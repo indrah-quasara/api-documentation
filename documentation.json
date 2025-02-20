@@ -1,167 +1,610 @@
 {
     "openapi": "3.0.3",
     "info": {
-      "title": "Quasara API",
-      "description": "The Quasara API empowers users to convert complex visual data into high-quality vector embeddings, enabling seamless integration with AI applications across various industries. This API supports a wide range of use cases, including autonomous driving, infrastructure visual inspection, earth observation, and manufacturing. By uploading visual content such as images, texts, and more, users can generate vector embeddings for tasks like semantic search, clustering, outlier detection, and small object detection, unlocking valuable insights and driving smarter, data-driven decision-making.\n\nIf you are looking for:\n\n- Sample Datasets: [Hugging Face Datasets](https://huggingface.co/quasara-io?sort_datasets=modified#datasets)\n- Interactive Frontend with Sample Datasets: [Hugging Face Frontend](https://huggingface.co/spaces/quasara-io/Semantic-Search-Frontend)\n\nSome useful links:\n- [Hugging Face](https://huggingface.co/quasara-io)\n- [LinkedIn](https://www.linkedin.com/company/quasara-io/)",
-      "contact": {
-        "email": "christoph@quasara.io"
-      },
-      "license": {
-        "name": "Apache 2.0",
-        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-      },
-      "version": "1.0.1"
+        "title": "Quasara API",
+        "description": "The Quasara API empowers users to convert complex visual data into high-quality vector embeddings,\nenabling seamless integration with AI applications across various industries. \nThis API supports a wide range of use cases, including autonomous driving, infrastructure visual inspection, \nearth observation, and manufacturing. By uploading visual content such as images, texts, and more, users can\ngenerate vector embeddings for tasks like semantic search, clustering, outlier detection, and small object \ndetection, unlocking valuable insights and driving smarter, data-driven decision-making.\n\nIf you are looking for: \n\n- Sample Datasets: [Hugging Face Datasets] (https://huggingface.co/quasara-io?sort_datasets=modified#datasets)\n- Interactive Frontend with Sample Datasets: [Hugging Face Frontend] (https://huggingface.co/spaces/quasara-io/Semantic-Search-Frontend)\n\nSome useful links:\n- [Hugging Face](https://huggingface.co/quasara-io)\n- [LinkedIn] (https://www.linkedin.com/company/quasara-io/)",
+        "contact": {
+            "email": "christoph@quasara.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.1"
     },
     "externalDocs": {
-      "description": "Find out more about Quasara",
-      "url": "https://www.quasara.io/"
+        "description": "Find out more about Quasara",
+        "url": "https://www.quasara.io/"
     },
     "tags": [
-      {
-        "name": "EMBED API",
-        "description": "Vectorization & Embedding"
-      },
-      {
-        "name": "SEARCH API",
-        "description": "Search & Semantic Search"
-      },
-      {
-        "name": "DATASET & OBJECT MANAGEMENT",
-        "description": "Handles dataset and object metadata"
-      },
-      {
-        "name": "JOB MANAGEMENT & AUTHORISATION",
-        "description": "Handles User Sessions & Async Jobs"
-      }
+        {
+            "name": "EMBED API",
+            "description": "Vectorization & Embedding"
+        },
+        {
+            "name": "SEARCH API",
+            "description": "Search & Semantic Search"
+        },
+        {
+            "name": "DATASET & OBJECT MANAGEMENT",
+            "description": "Handles dataset and object metadata"
+        },
+        {
+            "name": "JOB MANAGEMENT & AUTHORISATION",
+            "description": "Handles User Sessions & Async Jobs"
+        }
     ],
     "paths": {
-      "/define-dataset": {
-        "post": {
-          "tags": ["EMBED API"],
-          "summary": "Define a New Dataset",
-          "description": "This endpoint allows users to define a new dataset.",
-          "operationId": "defineDataset",
-          "requestBody": {
-            "description": "Define a new dataset by providing necessary details.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "dataset_display_name": {
-                      "type": "string",
-                      "description": "The display name of the dataset.",
-                      "example": "My New Dataset"
+        "/define-dataset": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Define a New Dataset",
+                "description": "This endpoint allows users to define a new dataset.",
+                "operationId": "defineDataset",
+                "requestBody": {
+                    "description": "Define a new dataset by providing necessary details.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "dataset_display_name": {
+                                        "type": "string",
+                                        "description": "The display name of the dataset.",
+                                        "example": "My New Dataset"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Content type of the request"
+                        }
                     }
-                  }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dataset defined successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Dataset My New Dataset defined successfully."
+                                        },
+                                        "dataset_id": {
+                                            "type": "string",
+                                            "example": "ds_12345abcdef"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid input data."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized access."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-              }
-            },
-            "required": true
-          },
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "description": "API key for authentication (Bearer token)"
-              }
-            },
-            {
-              "name": "Accept",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "default": "application/json",
-                "description": "Accepted response format"
-              }
-            },
-            {
-              "name": "Content-Type",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string",
-                "default": "application/json",
-                "description": "Content type of the request"
-              }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Dataset defined successfully",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Dataset My New Dataset defined successfully."
-                      },
-                      "dataset_id": {
-                        "type": "string",
-                        "example": "ds_12345abcdef"
-                      }
+        },
+        "/upload-dataset": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Upload a Dataset ZIP File",
+                "description": "This endpoint allows users to upload a ZIP file containing a dataset to a specific dataset ID.",
+                "operationId": "uploadDataset",
+                "requestBody": {
+                    "description": "Upload a ZIP file containing dataset files.",
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "dataset_zip_file": {
+                                        "type": "string",
+                                        "format": "byte",
+                                        "description": "The ZIP file containing the dataset.",
+                                        "example": "data.zip"
+                                    },
+                                    "dataset_id": {
+                                        "type": "string",
+                                        "description": "The unique identifier for the dataset being updated.",
+                                        "example": "ds_12345abcdef"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "multipart/form-data",
+                            "description": "Content type of the request"
+                        }
                     }
-                  }
-                }
-              }
-            },
-            "400": {
-              "description": "Bad request, invalid input",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string",
-                        "example": "Invalid input data."
-                      }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Dataset ZIP file uploaded successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully uploaded the ZIP file to dataset_id. The dataset contains 10 files."
+                                        },
+                                        "skipped_files": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": [
+                                                "file1.csv",
+                                                "file2.csv"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid input data."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized access."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                  }
                 }
-              }
-            },
-            "401": {
-              "description": "Unauthorized, invalid credentials",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string",
-                        "example": "Unauthorized access."
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "500": {
-              "description": "Internal server error",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "error": {
-                        "type": "string",
-                        "example": "An internal server error occurred."
-                      }
-                    }
-                  }
-                }
-              }
             }
-          }
+        },
+        "/extract-embeddings": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Extract Embeddings from Dataset",
+                "description": "This endpoint allows users to extract embeddings from a specified dataset using a given model and configuration options.",
+                "operationId": "extractEmbeddings",
+                "requestBody": {
+                    "description": "Request to extract embeddings from the dataset.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "dataset_id": {
+                                        "type": "string",
+                                        "description": "The unique identifier for the dataset.",
+                                        "example": "ds_12345abcdef"
+                                    },
+                                    "model_name": {
+                                        "type": "string",
+                                        "description": "(Optional) The name of the model to use for processing the dataset. Format: model_name:version.",
+                                        "example": "best:v2"
+                                    },
+                                    "split_method": {
+                                        "type": "string",
+                                        "description": "(Optional) The method for splitting the dataset. If not provided, the default method will be used.",
+                                        "example": "methodX"
+                                    },
+                                    "process_splits": {
+                                        "type": "boolean",
+                                        "description": "(Optional) Flag to indicate if splits should be processed. Defaults to true.",
+                                        "example": true
+                                    },
+                                    "process_images": {
+                                        "type": "boolean",
+                                        "description": "(Optional) Flag to indicate if images should be processed. Defaults to true.",
+                                        "example": true
+                                    },
+                                    "batch_size": {
+                                        "type": "integer",
+                                        "description": "(Optional) The number of items to process in each batch.",
+                                        "example": 100
+                                    },
+                                    "log_to_mail": {
+                                        "type": "boolean",
+                                        "description": "(Optional) Flag to receive email notifications about the job status.",
+                                        "example": true
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Content type of the request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Job created successfully for embedding extraction.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "job_id": {
+                                            "type": "string",
+                                            "example": "job-12345"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "At least one of 'process_images' or 'process_splits' must be set to True."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/download-embeddings": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Download Embeddings for a Tag",
+                "description": "This endpoint allows users to download embeddings associated with a specific tag.",
+                "operationId": "downloadEmbeddings",
+                "requestBody": {
+                    "description": "Request to download embeddings for a specific tag.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "tag_id": {
+                                        "type": "string",
+                                        "description": "The unique identifier for the tag you want to download.",
+                                        "example": "job-12345"
+                                    },
+                                    "update_embeddings": {
+                                        "type": "boolean",
+                                        "description": "(Optional) Flag to indicate if embeddings need to be re-downloaded after a tag update.",
+                                        "example": false
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Content type of the request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job status retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "job_id": {
+                                            "type": "string",
+                                            "example": "job-12345"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid job_id provided."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized access, please check your API key."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Job not found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Job with the provided ID does not exist."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An unexpected error occurred, please try again later."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
-      }
     }
-  }
-  
+}
