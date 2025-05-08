@@ -4,7 +4,6 @@
         "title": "Quasara API",
         "version": "1.0.1"
     },
-   
     "tags": [
         {
             "name": "EMBED API",
@@ -2645,6 +2644,839 @@
                                         "error": {
                                             "type": "string",
                                             "description": "Description of the error that occurred due to an internal server issue.",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/entity_extraction": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Extract Entities from Dataset",
+                "description": "This endpoint allows users to extract entities from a specified dataset using a given model.",
+                "operationId": "extractEntities",
+                "requestBody": {
+                    "description": "Request to extract entities from the dataset.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "dataset_id": {
+                                        "type": "string",
+                                        "description": "The unique identifier for the dataset.",
+                                        "example": "dataset-12345"
+                                    },
+                                    "document_domain": {
+                                        "type": "string",
+                                        "description": "The domain of documents to process. Must be one of the supported domains.",
+                                        "example": "User Manuals"
+                                    },
+                                    "model_name": {
+                                        "type": "string",
+                                        "description": "The name of the model to be used for processing the dataset.",
+                                        "example": "model_v1.0"
+                                    }
+                                },
+                                "required": [
+                                    "dataset_id",
+                                    "document_domain",
+                                    "model_name"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Content type of the request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Job created successfully for entity extraction.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "job_id": {
+                                            "type": "string",
+                                            "example": "job-12345"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Document domain 'Unsupported Domain' is not supported."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/retrieve-entity-extraction-data/": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Retrieve Entity Extraction Data",
+                "description": "This endpoint allows users to retrieve previously extracted entity data with pagination.",
+                "operationId": "retrieveEntityExtractionData",
+                "requestBody": {
+                    "description": "Request to retrieve entity extraction data.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "job_id": {
+                                        "type": "string",
+                                        "description": "The ID of the job whose entity extraction data is being queried.",
+                                        "example": "job-12345"
+                                    },
+                                    "page": {
+                                        "type": "integer",
+                                        "description": "The page number for pagination (min: 1).",
+                                        "default": 1,
+                                        "example": 1
+                                    },
+                                    "page_size": {
+                                        "type": "integer",
+                                        "description": "The number of items per page (min: 1, max: 50).",
+                                        "default": 10,
+                                        "example": 50
+                                    }
+                                },
+                                "required": [
+                                    "job_id"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Content type of the request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entity extraction data retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "current_page": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "page_size": {
+                                            "type": "integer",
+                                            "example": 50
+                                        },
+                                        "total_count": {
+                                            "type": "integer",
+                                            "example": 152
+                                        },
+                                        "total_pages": {
+                                            "type": "integer",
+                                            "example": 4
+                                        },
+                                        "results": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            },
+                                            "description": "Array of extracted entity data objects"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No entity extraction data found for the specified job ID.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "No object detection data found."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/message": {
+            "post": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Send Message for RAG Processing",
+                "description": "This endpoint allows users to send a message for processing using Retrieval Augmented Generation (RAG).",
+                "operationId": "sendMessage",
+                "requestBody": {
+                    "description": "Request to process a user message using RAG.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "message": {
+                                        "type": "string",
+                                        "description": "The user message to be processed.",
+                                        "example": "Lorem ipsum dolor sit amet?"
+                                    },
+                                    "tag_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "description": "List of tag IDs to filter relevant documents.",
+                                        "example": [
+                                            "tag-12345"
+                                        ]
+                                    },
+                                    "model_name": {
+                                        "type": "string",
+                                        "description": "The name of the language model to be used for processing.",
+                                        "example": "model_v1.0"
+                                    },
+                                    "conversation_id": {
+                                        "type": "string",
+                                        "description": "Optional ID of an existing conversation to continue. If not provided, a new conversation will be started.",
+                                        "example": "conv-12345"
+                                    }
+                                },
+                                "required": [
+                                    "message",
+                                    "tag_ids",
+                                    "model_name"
+                                ]
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Content type of the request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message processed successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "answer": {
+                                            "type": "string",
+                                            "example": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. "
+                                        },
+                                        "conversation_id": {
+                                            "type": "string",
+                                            "example": "conv-12345"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid input",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid model name"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/llm_models": {
+            "get": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Get Available LLM Models",
+                "description": "This endpoint returns a list of available language models that can be used for processing.",
+                "operationId": "getModels",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of available models retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "models": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "description": "List of available model names",
+                                            "example": [
+                                                "model_v1.0",
+                                                "model_v2.0",
+                                                "gpt-4"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/session/{session_id}": {
+            "get": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Get Session Data",
+                "description": "This endpoint retrieves session data for a specific session ID, with any MongoDB ObjectIds converted to strings.",
+                "operationId": "getSession",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "The unique identifier of the session"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Session data retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "_id": {
+                                            "type": "string",
+                                            "description": "The unique identifier of the session.",
+                                            "example": "session-12345"
+                                        },
+                                        "user_id": {
+                                            "type": "string",
+                                            "description": "The ID of the user who owns this session.",
+                                            "example": "user-12345"
+                                        },
+                                        "context": {
+                                            "type": "array",
+                                            "description": "List of context items providing reference information for the conversation.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "text": {
+                                                        "type": "string",
+                                                        "description": "The text content extracted from the document.",
+                                                        "example": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+                                                    },
+                                                    "pdf_name": {
+                                                        "type": "string",
+                                                        "description": "The name of the PDF document where the context was found.",
+                                                        "example": "lorem_ipsum.pdf"
+                                                    },
+                                                    "page_number": {
+                                                        "type": "integer",
+                                                        "description": "The page number in the PDF where the context appears.",
+                                                        "example": 24
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "tag_ids": {
+                                            "type": "array",
+                                            "description": "List of tag IDs associated with this session for filtering knowledge base content.",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "example": [
+                                                "tag-123abc",
+                                                "tag-12345abcde"
+                                            ]
+                                        },
+                                        "history": {
+                                            "type": "array",
+                                            "description": "The conversation history between user and assistant.",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "question": {
+                                                        "type": "string",
+                                                        "description": "The user's question or query.",
+                                                        "example": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua?"
+                                                    },
+                                                    "answer": {
+                                                        "type": "string",
+                                                        "description": "The assistant's response to the user's question.",
+                                                        "example": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "timestamp": {
+                                            "type": "string",
+                                            "description": "The timestamp when the session was created or last updated.",
+                                            "example": "2024-04-29T10:15:30.123Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request, invalid session ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid session ID format"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Session not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Session not found"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "An internal server error occurred."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/session_ids": {
+            "get": {
+                "tags": [
+                    "EMBED API"
+                ],
+                "summary": "Get User's Session IDs",
+                "description": "This endpoint retrieves all session IDs associated with the authenticated user.",
+                "operationId": "getSessionIds",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "API key for authentication (Bearer token)"
+                        }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "default": "application/json",
+                            "description": "Accepted response format"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of user's session IDs retrieved successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "sessions": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            },
+                                            "description": "List of session IDs belonging to the user",
+                                            "example": [
+                                                "session-12345abcde",
+                                                "session-67890fghij"
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized, invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid API credentials."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests, rate limit exceeded",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Rate limit exceeded. Please try again later."
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
                                             "example": "An internal server error occurred."
                                         }
                                     }
