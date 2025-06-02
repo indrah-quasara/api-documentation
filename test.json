@@ -1,0 +1,178 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Quasara API",
+    "version": "1.0.1"
+  },
+  "tags": [
+    {
+      "name": "EMBED API",
+      "description": "Handles turning raw data into vectors"
+    },
+    {
+      "name": "SEARCH API",
+      "description": "Handles searching and analytics based on vector embeddings"
+    },
+    {
+      "name": "DATASET & OBJECT MANAGEMENT",
+      "description": "Handles dataset and object metadata"
+    },
+    {
+      "name": "JOB MANAGEMENT & AUTHORISATION",
+      "description": "Handles User Sessions & Async Jobs"
+    }
+  ],
+  "paths": {
+    "/define-dataset": {
+      "post": {
+        "tags": [
+          "EMBED API"
+        ],
+        "summary": "Define a New Dataset",
+        "description": "This endpoint allows users to define a new dataset.",
+        "operationId": "defineDataset",
+        "x-codeSamples": [
+          {
+            "lang": "Python",
+            "label": "Python (requests)",
+            "source": "import requests\n\nurl = \"https://api.yourdomain.com/define-dataset\"\nheaders = {\n    \"Authorization\": \"Bearer YOUR_API_KEY\",\n    \"Accept\": \"application/json\",\n    \"Content-Type\": \"application/json\"\n}\ndata = {\n    \"dataset_display_name\": \"My New Dataset\"\n}\n\nresponse = requests.post(url, json=data, headers=headers)\nprint(response.status_code)\nprint(response.json())"
+          },
+          {
+            "lang": "Java",
+            "label": "Java (HttpURLConnection)",
+            "source": "import java.io.*;\nimport java.net.HttpURLConnection;\nimport java.net.URL;\n\npublic class DefineDataset {\n    public static void main(String[] args) throws IOException {\n        URL url = new URL(\"https://api.yourdomain.com/define-dataset\");\n        HttpURLConnection con = (HttpURLConnection) url.openConnection();\n        con.setRequestMethod(\"POST\");\n        con.setRequestProperty(\"Authorization\", \"Bearer YOUR_API_KEY\");\n        con.setRequestProperty(\"Accept\", \"application/json\");\n        con.setRequestProperty(\"Content-Type\", \"application/json\");\n        con.setDoOutput(true);\n\n        String jsonInputString = \"{\\\"dataset_display_name\\\": \\\"My New Dataset\\\"}\";\n        try(OutputStream os = con.getOutputStream()) {\n            byte[] input = jsonInputString.getBytes(\"utf-8\");\n            os.write(input, 0, input.length);\n        }\n\n        int code = con.getResponseCode();\n        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));\n        String inputLine;\n        StringBuffer content = new StringBuffer();\n        while ((inputLine = in.readLine()) != null) {\n            content.append(inputLine);\n        }\n        in.close();\n\n        System.out.println(\"Response Code: \" + code);\n        System.out.println(\"Response: \" + content.toString());\n    }\n}"
+          },
+          {
+            "lang": "JavaScript",
+            "label": "Node.js (axios)",
+            "source": "const axios = require('axios');\n\nconst config = {\n  method: 'post',\n  url: 'https://api.yourdomain.com/define-dataset',\n  headers: {\n    'Authorization': 'Bearer YOUR_API_KEY',\n    'Accept': 'application/json',\n    'Content-Type': 'application/json'\n  },\n  data: {\n    dataset_display_name: 'My New Dataset'\n  }\n};\n\naxios(config)\n  .then(response => {\n    console.log(response.status);\n    console.log(response.data);\n  })\n  .catch(error => {\n    console.error(error.response ? error.response.data : error.message);\n  });"
+          },
+          {
+            "lang": "cURL",
+            "label": "cURL",
+            "source": "curl -X POST https://api.yourdomain.com/define-dataset \\\n  -H \"Authorization: Bearer YOUR_API_KEY\" \\\n  -H \"Accept: application/json\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"dataset_display_name\": \"My New Dataset\"}'"
+          }
+        ],
+        "requestBody": {
+          "description": "Define a new dataset by providing necessary details.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "dataset_display_name": {
+                    "type": "string",
+                    "description": "The display name of the dataset.",
+                    "example": "My New Dataset"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "API key for authentication (Bearer token)"
+            }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "description": "Accepted response format"
+            }
+          },
+          {
+            "name": "Content-Type",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "application/json",
+              "description": "Content type of the request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dataset defined successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Dataset My New Dataset defined successfully."
+                    },
+                    "dataset_id": {
+                      "type": "string",
+                      "example": "ds_12345abcdef"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid input",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Invalid input data."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, invalid credentials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Unauthorized access."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "An internal server error occurred."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
