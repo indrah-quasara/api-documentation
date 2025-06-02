@@ -31,12 +31,6 @@
                 "summary": "Define a New Dataset",
                 "description": "This endpoint allows users to define a new dataset.",
                 "operationId": "defineDataset",
-                "x-codeSamples": [
-      {
-        "lang": "Python",
-        "label": "Python (requests)",
-        "source": "import requests\n\nurl = \"https://api.yourdomain.com/define-dataset\"\nheaders = {\n    \"Authorization\": \"Bearer YOUR_API_KEY\",\n    \"Accept\": \"application/json\",\n    \"Content-Type\": \"application/json\"\n}\ndata = {\n    \"dataset_display_name\": \"My New Dataset\"\n}\n\nresponse = requests.post(url, json=data, headers=headers)\nprint(response.status_code)\nprint(response.json())"
-      }]
                 "requestBody": {
                     "description": "Define a new dataset by providing necessary details.",
                     "content": {
